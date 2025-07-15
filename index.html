@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Crédito GAC MOTOR</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-white font-sans text-gray-800">
+  <header class="bg-red-700 text-white p-4 flex items-center justify-between">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/GAC_Motor_logo.png" alt="GAC Logo" class="h-10">
+    <h1 class="text-xl font-bold">Simulador de Crédito - GAC MOTOR Colombia</h1>
+  </header>
+
+  <main class="p-6 max-w-4xl mx-auto">
+    <section class="mb-6">
+      <h2 class="text-lg font-semibold text-red-700 mb-2">Datos del Cliente</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Nombre completo" class="border p-2 rounded">
+        <input type="text" placeholder="Cédula" class="border p-2 rounded">
+        <input type="email" placeholder="Correo electrónico" class="border p-2 rounded">
+        <input type="tel" placeholder="Teléfono" class="border p-2 rounded">
+      </div>
+    </section>
+
+    <section class="mb-6">
+      <h2 class="text-lg font-semibold text-red-700 mb-2">Seleccione Modelo</h2>
+      <select id="modelo" class="border p-2 rounded w-full">
+        <option value="Aion" data-precio="94990000">Aion - $94.990.000</option>
+        <option value="Aion Y" data-precio="117990000">Aion Y - $117.990.000</option>
+        <option value="Emzoom Confort" data-precio="109990000">Emzoom Confort - $109.990.000</option>
+        <option value="Emzoom Rstyle" data-precio="124990000">Emzoom Rstyle - $124.990.000</option>
+        <option value="Emkoo HEV 2025" data-precio="139990000">Emkoo HEV 2025 - $139.990.000</option>
+        <option value="Emkoo HEV 2026" data-precio="149990000">Emkoo HEV 2026 - $149.990.000</option>
+      </select>
+    </section>
+
+    <section class="mb-6">
+      <h2 class="text-lg font-semibold text-red-700 mb-2">Simulación de Crédito</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <input type="number" id="cuota-inicial" placeholder="Cuota inicial ($)" class="border p-2 rounded">
+        <select id="plazo" class="border p-2 rounded">
+          <option value="12">12 meses</option>
+          <option value="24">24 meses</option>
+          <option value="36">36 meses</option>
+          <option value="48">48 meses</option>
+          <option value="60">60 meses</option>
+          <option value="72">72 meses</option>
+          <option value="84">84 meses</option>
+        </select>
+        <input type="number" step="0.01" id="interes" placeholder="Tasa interés mensual (%)" class="border p-2 rounded" value="1.17">
+      </div>
+      <div class="mt-4">
+        <button onclick="calcularCuota()" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800">Calcular</button>
+      </div>
+    </section>
+
+    <section id="resultado" class="hidden border-t pt-4">
+      <h3 class="text-md font-semibold text-gray-700">Resultado de la simulación</h3>
+      <p class="mt-2">Valor financiado: <span id="valor-financiado" class="font-bold"></span></p>
+      <p>Valor cuota mensual aprox.: <span id="cuota-mensual" class="font-bold text-green-700"></span></p>
+    </section>
+
+    <section class="mt-8 border-t pt-4">
+      <h2 class="text-lg font-semibold text-red-700 mb-2">Asesor Comercial</h2>
+      <p class="text-sm">Jhonathan Gonzalez Cortes<br>3197124371<br>jhonathan@grupoautomotrizcarrera.com</p>
+    </section>
+  </main>
+
+  <script>
+    function calcularCuota() {
+      const modelo = document.getElementById('modelo');
+      const precio = parseInt(modelo.options[modelo.selectedIndex].dataset.precio);
+      const inicial = parseInt(document.getElementById('cuota-inicial').value) || 0;
+      const plazo = parseInt(document.getElementById('plazo').value);
+      const interes = parseFloat(document.getElementById('interes').value) / 100;
+      const financiado = precio - inicial;
+      const cuota = (financiado * interes) / (1 - Math.pow(1 + interes, -plazo));
+
+      document.getElementById('valor-financiado').innerText = `$ ${financiado.toLocaleString('es-CO')}`;
+      document.getElementById('cuota-mensual').innerText = `$ ${Math.round(cuota).toLocaleString('es-CO')}`;
+      document.getElementById('resultado').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
